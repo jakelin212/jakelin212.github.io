@@ -20,7 +20,7 @@ function estainPWSummary(){
                 alert("Gene session cleared, please put in the symbol again");
                 return;
         }
-        $( "#gpprogress" ).html("<img src='images/progress.gif' /> Processing summary " + parameter + " ...");
+        $( "#gpprogress" ).html("<img src='http://jakelin212.github.io/images/progress.gif' /> Processing summary " + parameter + " ...");
 	var pwsrc = ($("#pw_source").val());
         var gsvapw = $("#gsvapw").val();
         $.ajax({
@@ -72,7 +72,7 @@ function estainGeneSummary(){
 		alert("Gene session cleared, please put in the symbol again");
                 return;
         }
-        $( "#gpprogress" ).html("<img src='images/progress.gif' /> Processing summary " + parameter + " ...");
+        $( "#gpprogress" ).html("<img src='http://jakelin212.github.io/images/progress.gif' /> Processing summary " + parameter + " ...");
         $.ajax({
                 type: "POST",
                 url:  "/cgi-bin/get_hema_gexpcounts.cgi",
@@ -141,7 +141,6 @@ function plotGeneStainedMap(mapsource, jo, genestains,mapcontainer){
 	_title = _title.replace("_cclin", "");
 	_title = _title.replace("_bclin", "");
 	_title = _title.replace("_zscore", "");
-        //$( "#gpprogress" ).html("Preparing " + _title + " map ..." + "<img src='images/progress.gif' />");
 	var shemap_series = [];
         showcentroids = false; 
         /*if  (showcentroids == true && mapcontainer != "container"){
@@ -174,7 +173,6 @@ function plotGeneStainedMap(mapsource, jo, genestains,mapcontainer){
                 shemap_series.push(genestains["medium"]);
                 shemap_series.push(genestains["high"]);
 	}
-	//$( "#mapprogress" ).html("Plotting ..." + "<img src='images/progress.gif' />");
 	$('#' + mapcontainer).highcharts({
         chart: {
             zoomType: 'xy',

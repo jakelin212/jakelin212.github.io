@@ -2,7 +2,7 @@
 function estainCollected(){
 	var parameter = ($("#gsmcollector").val());
         var column = $("#columns").val();
-	$( "#snp_dialog" ).html("<img src='images/progress.gif' /> Processing eStain ...");
+	$( "#snp_dialog" ).html("<img src='http://jakelin212.github.io/images/progress.gif' /> Processing eStain ...");
         $.ajax({
                 type: "POST",
                 url:  "/cgi-bin/get_hema_annostain.cgi",
@@ -32,7 +32,7 @@ function estainAnno(){
 		ingsms = ingsms + annogsms[i] + " "; 
 	}
         var column = $("#columns").val();
-        $( "#snp_dialog" ).html("<img src='images/progress.gif' /> Processing eStain ...");
+        $( "#snp_dialog" ).html("<img src='http://jakelin212.github.io/images/progress.gif' /> Processing eStain ...");
         $.ajax({
                 type: "POST",
                 url:  "/cgi-bin/get_hema_annostain.cgi",
@@ -61,7 +61,7 @@ function estainMeth(){
         if (parameter == ""){
                 return;
         }
-        $( "#gpprogress" ).html("<img src='images/progress.gif' /> Processing " + parameter + " eStain ...");
+        $( "#gpprogress" ).html("<img src='http://jakelin212.github.io/images/progress.gif' /> Processing " + parameter + " eStain ...");
         if (sessionsource == "tcga"){
                 $.ajax({
                 type: "POST",
@@ -85,8 +85,8 @@ function estainGene(){
 	if (parameter == ""){
 		return;
 	}
-	$("#pwdialog").html(" eStaining " + parameter + "... <img src='images/progress.gif'/>");
-        $( "#gpprogress" ).html("<img src='images/progress.gif' /> Processing " + parameter + " eStain ...");
+	$("#pwdialog").html(" eStaining " + parameter + "... <img src='http://jakelin212.github.io/images/progress.gif'/>");
+        $( "#gpprogress" ).html("<img src='http://jakelin212.github.io/images/progress.gif' /> Processing " + parameter + " eStain ...");
         if (sessionsource == "tcga"){
 		$("#xpwfeatureatype").val("gexp");
 		tcga_pwstain(parameter);
@@ -136,10 +136,10 @@ function estainPathway(){
         if (parameter == ""){
                 return;
         }
-        $("#pwdialog").html(" eStaining " + parameter + "... <img src='images/progress.gif'/>");
+        $("#pwdialog").html(" eStaining " + parameter + "... <img src='http://jakelin212.github.io/images/progress.gif'/>");
 	var pwsrc = ($("#pw_source").val());
 	var fdrpv = "" + pwpwfdr; //$("#pwpwfdr").val();	
-        $( "#gpprogress" ).html("<img src='images/progress.gif' /> Processing " + parameter + " eStain ...");
+        $( "#gpprogress" ).html("<img src='http://jakelin212.github.io/images/progress.gif' /> Processing " + parameter + " eStain ...");
         if (sessionsource == "tcga"){
 		if ( $("#xpwfeatureatype").val()== "b_clin"){
 			parameter = bclin_dic[parameter];

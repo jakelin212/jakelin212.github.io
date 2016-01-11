@@ -92,7 +92,7 @@ inparams = "IRX3==blood:GSM*GSM215000 GSM214999 GSM214983 GSM214984 GSM214988 GS
 	}
 
 	paramobj["sample_groups"] = sample_groups.join();	
-	$( "#sgexp_dialog" ).html("Working...<img src='images/progress.gif' />");
+	$( "#sgexp_dialog" ).html("Working...<img src='http://jakelin212.github.io/images/progress.gif' />");
         $.ajax({
                 type: "POST",
                 url:  "/cgi-bin/get_hema_box2.cgi",
@@ -173,7 +173,7 @@ function downloadSelectedGroup(gene, categ){
 
 }
 function downloadGene(ingene){
-	$( "#sgexp_dialog" ).html("Downloading...<img src='images/progress.gif' />");
+	$( "#sgexp_dialog" ).html("Downloading...<img src='http://jakelin212.github.io/images/progress.gif' />");
 	$.ajax({
                 type: "POST",
                 url:  "/cgi-bin/download_hema_gexp.cgi",

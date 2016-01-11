@@ -46,7 +46,7 @@ function gotcgax(){
 
 function gotcga(mapcontainer){
  	mapcontainer = mapcontainer || "container";
- 	$( "#mapprogress" ).html("Preparing TCGA map ..." + "<img src='images/progress.gif' />");
+ 	$( "#mapprogress" ).html("Preparing TCGA map ..." + "<img src='http://jakelin212.github.io/images/progress.gif' />");
         $.ajax({
                 type: "POST",
                 url:  "/cgi-bin/get_hema_tcga.cgi",
@@ -349,7 +349,7 @@ function plotStainedMap(mapsource, jo, stainedobj, mapcontainer){
         if (mapsource == "leukemia"){
                 _title = "Leukemia_Normal";
         }
-        $( "#mapprogress" ).html("Preparing " + _title + " map ..." + "<img src='images/progress.gif' />");
+        $( "#mapprogress" ).html("Preparing " + _title + " map ..." + "<img src='http://jakelin212.github.io/images/progress.gif' />");
 	var cmlset = jo["CML"];
         var amlset = jo["AML"];
         var blymphoid = jo["B-Lymphoid"];
@@ -514,7 +514,7 @@ function plotStainedMap(mapsource, jo, stainedobj, mapcontainer){
         shemap_series.push(stainedobj);
 	$("#showref").hide();
 	$("#hideref").hide();
-	$( "#mapprogress" ).html("Plotting ..." + "<img src='images/progress.gif' />");
+	$( "#mapprogress" ).html("Plotting ..." + "<img src='http://jakelin212.github.io/images/progress.gif' />");
         $('#' + mapcontainer).highcharts({
         chart: {
             zoomType: 'xy',
@@ -769,7 +769,7 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
 	if (mapsource.indexOf('allold') != -1){
 		mapsource = "hemaall_old";
 	}		
-	$( "#mapprogress" ).html("Preparing " + _title + " map ..." + "<img src='images/progress.gif' />");
+	$( "#mapprogress" ).html("Preparing " + _title + " map ..." + "<img src='http://jakelin212.github.io/images/progress.gif' />");
 	$.ajax({
                 type: "POST",
                 url:  "/cgi-bin/get_" + mapsource + "_cluster.cgi",
@@ -781,7 +781,7 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
                                 var jo  = $.parseJSON(json);
                                 var _data = jo["aaData"];
                                 gsms = jo["gsms"];
-				gsmsxy = jo["gsmsxy"];
+				//gsmsxy = jo["gsmsxy"];
 				var cmlset = jo["CML"];
                                 var amlset = jo["AML"];
                                 var blymphoid = jo["B-Lymphoid"];
@@ -1041,7 +1041,7 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
        	if (stainsource != null){
 		shemap_series.push(stainedobj);
 	} 
-        $( "#mapprogress" ).html("Plotting ..." + "<img src='images/progress.gif' />"); 
+        $( "#mapprogress" ).html("Plotting ..." + "<img src='http://jakelin212.github.io/images/progress.gif' />"); 
         $("#showref").hide();
 	$("#hideref").hide(); 
 	$('#' + mapcontainer).highcharts({
@@ -1115,10 +1115,6 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
                     }
                 },
                 tooltip: {
-		    /*format: function() {
-        return 'The value for <b>' + this.x + '</b> is <b>' + this.y + '</b>, in series '+ this.series.name + " " +  gsms[this.x + "_" + this.y];
-    },*/
-
                     borderWidth: 0, 	
 		    headerFormat: '<b>{series.name}</b><br>'
 		    ,pointFormat: '{point.x}, {point.y}<br>click:add gsm/view geo' //+ gsms[{point.x} + "_" + {point.y}]
@@ -1175,7 +1171,6 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
        },
         series:shemap_series 
     });
-	//new Messi('For your information, our system admin has told us that there will be intermittent server maintenance work and that will result in brief downtimes in the next few days. Thanks for your understanding', {titleClass: 'warning', title: 'HEMAP news'});
 	$("#" + mapcontainer).show();
 	$("#stainctl").show();
         $( "#mapprogress" ).html("");

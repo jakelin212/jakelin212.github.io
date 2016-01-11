@@ -1,5 +1,5 @@
 var pwaoc = [
-{ "sTitle": "feature" },
+{ "sTitle": "feature", sWidth: "40px" },
 { "sTitle": "corr." },
 { "sTitle": "adjpvalue" },
 { "sTitle": "BHadj"},
@@ -30,13 +30,12 @@ function search_pwpw(clustercb){
 		sortby = [[ 2, "desc" ]];
 	if (pworder == "adj_hypgpv")
                 sortby = [[ 3, "desc" ]];
-	$("#pwdialog").html(" Searching... <img src='images/progress.gif'/>");	
+	$("#pwdialog").html(" Searching... <img src='http://jakelin212.github.io/images/progress.gif'/>");	
 	
 	var xact = "/cgi-bin/get_pwpw.cgi";
 	if ($("#xmapselect").val() == "aml")
 		xact = "/cgi-bin/get_aml_pwpw.cgi";
 	if ($("#xmapselect").val() == "tcga"){
-        	//alert("not ready");
 	        xact = "/cgi-bin/get_tcga_pwpw.cgi";  
 	}
 	$.ajax({
@@ -58,6 +57,7 @@ function search_pwpw(clustercb){
 			        "aaData": _data,
         			"bProcessing": true,
         			"bLengthChange": false,
+				"bAutoWidth": false,
         			"aaSorting": sortby,
         			"sDom": '<"H"lr>t<"F"ipf>', //'<"if">i<"l"><tpfi>', 
         			"iDisplayLength": showrownum,
@@ -71,7 +71,8 @@ function search_pwpw(clustercb){
 				}
 			},
 			error: function(){
-				alert("e");		
+				$("#pwdialog").html("Error");
+				new Messi('Error on search, please check pathway/feature input and contact authors if error persists ', {title: 'Error'});		
 			}
 	});
 }
@@ -87,7 +88,7 @@ function toggle_clustermap(){
 
 function updateHexpmap(){
 	$("#pwpwfeature").val("");
-	$("#hexpmap").html("Loading <img src='images/progress.gif'/>")
+	$("#hexpmap").html("Loading <img src='http://jakelin212.github.io/images/progress.gif'/>")
 	var hexsource = $("#xmapselect").val();
 	sessionsource = hexsource;
 	$('#gene_stain_ctl').val("");
@@ -164,11 +165,11 @@ function updateClusterTypeahead(){
 	       }else if (xftype == "gsva"){
 			$('#gene_stain_ctl').typeahead().data('typeahead').source = msig_pws;
                         $('#pwpwfeature').typeahead().data('typeahead').source = fullmap_gsva_pwcluster_list;
-                        $("#reportingx").html('<button onclick="javascript:getpwmember()">getGeneMembers</button>');
+                        $("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
 	       }else if (xftype == "drug"){
 			$('#gene_stain_ctl').typeahead().data('typeahead').source = drugsig_pws;
                         $('#pwpwfeature').typeahead().data('typeahead').source = fullmap_drug_pwcluster_list;
-			$("#reportingx").html('<button onclick="javascript:getpwmember()">getGeneMembers</button>');
+			$("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
                 }
 	}
 	if (xmap == "aml"){
@@ -182,12 +183,12 @@ function updateClusterTypeahead(){
                }else if (xftype == "gsva"){
         		$('#gene_stain_ctl').typeahead().data('typeahead').source = msig_pws.concat(extra_aml);
 	                $('#pwpwfeature').typeahead().data('typeahead').source = aml_gsva_pwcluster_list;
-			$("#reportingx").html('<button onclick="javascript:getpwmember()">getGeneMembers</button>');
+			$("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
                 }else if (xftype == "drug"){
 			$('#gene_stain_ctl').typeahead().data('typeahead').source = drugsig_pws;
 			//$('#gene_stain_ctl').typeahead().data('typeahead').source = msig_pws.concat(extra_aml);
                         $('#pwpwfeature').typeahead().data('typeahead').source = aml_drug_pwcluster_list;
-			$("#reportingx").html('<button onclick="javascript:getpwmember()">getGeneMembers</button>');
+			$("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
                 }
 	}
 	if (xmap == "tcga"){
@@ -211,18 +212,18 @@ function updateClusterTypeahead(){
                }else if (xftype == "gsva"){
                         $('#gene_stain_ctl').typeahead().data('typeahead').source = msig_pws;
 		 	$('#pwpwfeature').typeahead().data('typeahead').source = tcga_pwpw_cclass_gsva;
-            		$("#reportingx").html('<button onclick="javascript:getpwmember()">getGeneMembers</button>');
+            		$("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
 	       }else if (xftype == "drug"){
 			$('#gene_stain_ctl').typeahead().data('typeahead').source = drugsig_pws;
                         $('#pwpwfeature').typeahead().data('typeahead').source = tcga_pwpw_cclass_drug;
-			$("#reportingx").html('<button onclick="javascript:getpwmember()">getGeneMembers</button>');
+			$("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
                 }else if (xftype == "meth"){
                         $('#pwpwfeature').typeahead().data('typeahead').source = tcga_pwpw_cclass_meth;
         		$('#gene_stain_ctl').typeahead().data('typeahead').source = meth_pathways; 
 	       }else if (xftype == "cnvr"){
                         $('#pwpwfeature').typeahead().data('typeahead').source = tcga_pwpw_cclass_cnvr;
 			$('#gene_stain_ctl').typeahead().data('typeahead').source = cnvr_pathways;
-			$("#reportingx").html('<button onclick="javascript:lookupGenecnvr()">lookupGeneCyto</button><button onclick="javascript:lookupCytoGenes()">lookupCytoGenes</button>');
+			$("#reportingx").html(' <button onclick="javascript:lookupGenecnvr()">Gene2Cyto</button> <button onclick="javascript:lookupCytoGenes()">Cyto2Genes</button>');
                 }else if (xftype == "mirn"){
                         $('#pwpwfeature').typeahead().data('typeahead').source = tcga_pwpw_cclass_mirn;
 			$('#gene_stain_ctl').typeahead().data('typeahead').source = mirn_pathways;
@@ -362,7 +363,7 @@ function download_pwpw(){
                 sortby = [[ 2, "desc" ]];
         if (pworder == "adj_hypgpv")
                 sortby = [[ 3, "desc" ]];
-        $("#pwdialog").html(" Processing... <img src='images/progress.gif'/>");
+        $("#pwdialog").html(" Processing... <img src='http://jakelin212.github.io/images/progress.gif'/>");
 
         $.ajax({
                 type: "POST",
@@ -377,7 +378,7 @@ function download_pwpw(){
 				window.open(uri, clusterclass + '.pw.csv');
 			},
                         error: function(){
-                                alert("network error on download");
+                                new Messi('Network error on download, please contact authors if error persists ', {title: 'Error'});
                         }
         });
 }
@@ -387,7 +388,7 @@ function loadCLINSAMP(){
         if (clusterclass == "") return;
         var ccsource = $("#xmapselect").val();
         var gtype = null;
-        $("#pwdialog").html(" Processing... <img src='images/progress.gif'/>");
+        $("#pwdialog").html(" Processing... <img src='http://jakelin212.github.io/images/progress.gif'/>");
         var purl = "/cgi-bin/get_cluster2_gsms.cgi";
         $.ajax({
                 type: "POST",
@@ -409,7 +410,7 @@ function loadCLINSAMP(){
                                 }
                         },
                         error: function(){
-                                alert("network error on loading CLIN SAMP");
+                                new Messi('Network error on page load, please contact authors if error persists ', {title: 'Error'});
                         }
         });
 }
@@ -419,7 +420,7 @@ function loadBSAMP(){
 	if (clusterclass == "") return;
         var ccsource = $("#xmapselect").val();
 	var gtype = null; 
-        $("#pwdialog").html(" Processing... <img src='images/progress.gif'/>");
+        $("#pwdialog").html(" Processing... <img src='http://jakelin212.github.io/images/progress.gif'/>");
 	var purl = "/cgi-bin/get_cluster2_gsms.cgi";
 	if (ccsource == "tcga"){
 		gtype = "SAMP";
@@ -445,7 +446,7 @@ function loadBSAMP(){
  				}
 			},
                         error: function(){
-                                alert("network error on loading BSAMP");
+				new Messi('Network error on page load, please contact authors if error persists ', {title: 'Error'});
                         }
         });
 }
