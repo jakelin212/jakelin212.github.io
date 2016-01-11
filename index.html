@@ -1,0 +1,335 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="shortcut icon" href="http://jakelin212.github.io/images/leuwiki.jpg" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>HEMAP: Blood cancer/AML maps and exploration</title>
+  <link rel="stylesheet" href="lib/css/jquery-ui.css" />
+  <style type="text/css" title="currentStyle">
+        @import "lib/css/demo_page.css";
+        @import "lib/css/demo_table.css";
+  </style>
+        <script type="text/javascript" src="http://jakelin212.github.io/lib/js/jquery.min.js"></script>
+        <script src="http://jakelin212.github.io/lib/js/jquery-ui-1.10.4.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://jakelin212.github.io/lib/css/bootstrap.css" media="all">
+        <script type="text/javascript" src="http://jakelin212.github.io/lib/js/bootstrap_patch.js"></script>
+        <script type="text/javascript" src="http://jakelin212.github.io/lib/js/typeahead_patch.js"></script>
+	<script src="http://jakelin212.github.io/lib/js/highcharts.js"></script> 
+        <script type="text/javascript" src="http://jakelin212.github.io/lib/js/exporting.js"></script>
+	<script src="http://jakelin212.github.io/lib/js/highcharts-more.js"></script>
+        <!-- <script src="http://jakelin212.github.io/lib/js/heatmap.js"></script> -->
+	<script src="http://jakelin212.github.io/lib/js/jquery.dataTables.min.js"></script>
+	<script src="http://jakelin212.github.io/lib/js/messi.js"></script>
+	<script type="text/javascript" src="http://jakelin212.github.io/lib/js/spectrum.js"></script>
+
+	<script type="text/javascript" src="http://jakelin212.github.io/js/offline-exporting.js"></script>
+	<script type="text/javascript" src="http://jakelin212.github.io/js/elements.js"></script>
+	<script type="text/javascript" src="http://jakelin212.github.io/js/pw_elements.js"></script>
+	<script type="text/javascript" src="http://jakelin212.github.io/js/clusters.js"></script>
+        <script type="text/javascript" src="http://jakelin212.github.io/js/tcga_pwpw_cclass.js"></script>
+        <script type="text/javascript" src="http://jakelin212.github.io/js/pw_interaction.js"></script>
+	<script type="text/javascript" src="http://jakelin212.github.io/js/portrait.js"></script>
+	<script type="text/javascript" src="http://jakelin212.github.io/js/shemap.js"></script>    
+	<script type="text/javascript" src="http://jakelin212.github.io/js/shemap_stain.js"></script>    
+	<script type="text/javascript" src="http://jakelin212.github.io/js/estain.js"></script> 
+	<script type="text/javascript" src="http://jakelin212.github.io/js/tcga_estain.js"></script>
+	<script type="text/javascript" src="http://jakelin212.github.io/js/util.js"></script>  
+	<script type="text/javascript" src="http://jakelin212.github.io/js/configuration.js"></script>
+	<script type="text/javascript" src="http://jakelin212.github.io/js/gexp_box.js"></script>
+        <script type="text/javascript" src="http://jakelin212.github.io/js/interaction.js"></script>
+        <script type="text/javascript" src="http://jakelin212.github.io/js/plug.js"></script>
+        <script type="text/javascript" src="http://jakelin212.github.io/js/hg19_genes.js"></script>
+        <script type="text/javascript" src="http://jakelin212.github.io/js/meth_genes.js"></script>
+	<script type="text/javascript" src="http://jakelin212.github.io/js/gsva2.js"></script>
+        <script type="text/javascript" src="http://jakelin212.github.io/js/all_pathways.js"></script>
+
+        <link rel="stylesheet" href="http://jakelin212.github.io/lib/css/messi.min.css" />
+        <link rel="stylesheet" href="http://jakelin212.github.io/lib/css/spectrum.css" />
+	<link rel="stylesheet" href="http://jakelin212.github.io/lib/css/style.css" />
+	<style type="text/css">
+    	img.prev{
+        width:500px !important;
+        height:500px !important;
+    }
+    p.break
+    {
+      width:28em;
+      /*border:1px solid #000000;*/
+      word-wrap:break-word;
+    }
+    html, body {
+                width:          99%;
+                height:         99%;
+                padding:        0;
+                margin:         0;
+                overflow:     auto !important;
+              }
+        td
+        {
+            padding:10px;
+        }
+        .header {
+                width:100%;
+                height: 120px;
+                padding: 5px;
+                background-size: cover;
+                background-color: white;
+              }
+	#outlier_ctl {
+    position: fixed;
+    bottom: 10;
+    width: 100%;
+}
+
+#footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:40px;   /* Height of the footer */
+   background:#6cf;
+}
+
+                                      .linkstyle{
+                                        color:#FF00;
+                                      }
+  a:link {color:#FF00;}    /* unvisited link */
+
+#hexpmap{
+float:left;
+width:60%;
+height:750px;
+overflow:scroll;
+}
+
+#hexpmenu{
+float:left;
+width:40%;
+overflow:scroll;
+}
+
+#hexpmapselect{
+float:left;
+width:90%;
+height:780px;
+overflow:scroll;
+}
+#dragbar{
+   background-color:black;
+   height:100%;
+   float: right;
+   width: 3px;
+   cursor: col-resize;
+}
+#ghostbar{
+    width:3px;
+    background-color:#000;
+    opacity:0.5;
+    position:absolute;
+    cursor: col-resize;
+    z-index:999}
+ 
+  </STYLE>
+
+
+		<script type="text/javascript">
+$(function () {
+	var tabs = $( "#tabs" ).tabs({
+        beforeActivate: function( event, ui ) {
+        // Panel that is currently active, about to be deactivated
+        var i = ui.oldPanel;
+        // Tab associated with the currently active panel
+        var j = ui.oldTab;
+        // Panel that is about to be activated
+        var k = ui.newPanel;
+        // Tab associated with the panel that is about to be activated
+        var t = ui.newTab;
+        var mindex = ui.newTab.index();
+	settingsHemap();	
+	if (mindex == 1){
+                tcga_tsne_mode = 0;
+		$("#tcgactlx").hide();//loadPWTable();
+		return;
+        }
+        if (mindex == 2){
+                initAnno();
+		return;
+        }
+	if (mindex == 3){
+                initBoxplot(_stat_div);
+        }
+        if (mindex == 4){
+        }
+        if (mindex == 5){
+		//displayInfo();
+        }
+    }
+    });
+    var url = window.location.toString();
+    var query_string = url.split("?");
+    var source = "hemaall";
+    if (query_string.length > 1){
+	if (query_string[1] == "leukemia"){
+		source = "leukemia";
+	}
+    }
+    goshemap(source, all_cluster, null);
+    goshemap(source, all_cluster, null,"hexpmap");
+    initstainctl();
+$('#gene_stain_ctl').typeahead({source: hg19genes, items:20});
+$("#gene_stain_ctl").css("display","inline");
+$('#pwpwfeature').typeahead({source: fullmap_drug_pwcluster_list, items: 25});
+
+    var nVer = navigator.appVersion;
+    var nAgt = navigator.userAgent;
+    var browserName  = navigator.appName;
+    var fullVersion  = ''+parseFloat(navigator.appVersion); 
+    var majorVersion = parseInt(navigator.appVersion,10);
+    var nameOffset,verOffset,ix;
+
+
+function GetCookie(name) {
+var arg=name+"=";
+var alen=arg.length;
+var clen=document.cookie.length;
+var i=0;
+while (i<clen) {
+var j=i+alen;
+if (document.cookie.substring(i,j)==arg)
+return "here";
+i=document.cookie.indexOf(" ",i)+1;
+if (i==0) break;
+}
+return null;
+}
+var visit=GetCookie("COOKIE1");
+if (visit==null){
+var expire=new Date();
+expire=new Date(expire.getTime()+7776000000);
+document.cookie="COOKIE1=here; expires="+expire;
+var ieu = "";
+if (nAgt.indexOf(".NET") != -1){
+	ieu = "Some HEMAP features do not work on Internet Explorer due to HTML5 compatibility issues. Please instead use Chrome, Firefox, Opera or Safari. "
+}
+new Messi(ieu + ' It could be that you are visiting HEMAP for the first time or have not used it in some time. Please take a look at our <a href="http://jakelin212.github.io/doc/hemap_user_guide.pdf" target="_blank"><font color="blue">user guide</font></a> for examples, advanced usage and more information.', {title: 'Browser info', titleClass:'warning', modal: true});
+}else{
+// In MSIE, the true version is after "MSIE" in userAgent
+if ((verOffset=nAgt.indexOf("MSIE"))!=-1 || (nAgt.indexOf(".NET") != -1) ) {
+     new Messi('Some features of HEMAP do not work on Internet Explorer due to HTML5 compatibility issues. We recommend using Chrome, Opera, Firefox or Safari. Please take a look at <a href="http://jakelin212.github.io/doc/hemap_user_guide.pdf" target="_blank"><font color="blue">user guide</font></a> for examples, advanced usage and more information.', {title: 'Browser info', titleClass:'warning', modal: true});
+ browserName = "Microsoft Internet Explorer";
+ fullVersion = nAgt.substring(verOffset+5);
+}
+else if (navigator.appName == 'Microsoft Internet Explorer'){
+    new Messi('Some features of HEMAP do not work on Internet Explorer due to HTML5 compatibility issues. We recommend using Chrome, Opera, Firefox or Safari and have a look at <a href="http://jakelin212.github.io/doc/hemap_user_guide.pdf" target="_blank"><font color="blue">user guide</font></a> for examples, advanced usage and more information.', {title: 'Browser info', titleClass:'warning', modal: true});
+}
+// In Chrome, the true version is after "Chrome"
+else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
+ browserName = "Chrome";
+ fullVersion = nAgt.substring(verOffset+7);
+}
+}
+
+});	
+
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54342454-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+	</head>
+	<body>
+<div id="tabs">
+  <ul>
+    <li><a href="#summary"><SPAN TITLE="Interactive Maps"><b>HEMAP</b></SPAN></a></li>
+    <li><a href="#hexplorer"><SPAN TITLE="Explore e-stainings via genes, pathways and drug signatures(including pairwise results)"><b>Explore</b></SPAN></a></li>
+    <li><a href="#SNP"><SPAN TITLE="Search curated annotations"><b>Annotations</b></SPAN></a></li>
+    <li><a href="#GEXP"><SPAN TITLE="GEXP Statistics"><b>GEXP Boxplots</b></SPAN></a></li>
+    <li><a href="#Portraits"><SPAN TITLE="Custom map and search displays"><b>Settings</b></SPAN></a></li>
+    <li><a href="#HInfo"><b>Info</b></a></li>
+</ul>
+  <div id="summary">
+<font color="blue"><span><a href="#" onclick="javascript:viewHemap('hemaall');"><font color="blue">HEMAP: All</font></a>&nbsp;<a href="#" onclick="javascript:viewHemap('aml');"><font color="blue">AML</font></a>&nbsp;<a href="#" onclick="javascript:viewHemap('tcga');"><font color="blue">TCGA</font></a> </span><span id="showref"><a href="#" onclick="showRefMap();"><font color="blue">&nbsp;showRefMap</font></a></span><span id="hideref"><a href="#" onclick="hideRefMap();"><font color="blue">&nbsp;hideRefMap</font></a></span></font><span style="float:right;"><span id="sgsmannolink"></span><span id="reporting"></span>&nbsp;<a href="http://jakelin212.github.io/doc/hemap_user_guide.pdf" target="_blank"><font color="blue">User guide</font></a> </span><br>
+<span id="mapprogress"></span>
+    <div id="container" style="width: 90%; height: 900px;margin: 5px auto;"></div>
+    <div id="stainctl" style="min width: 310px;height: 50px auto;  margin: 5px auto;"></div>	    
+    <div id="tcgactl"><a href="#" onclick="javascript:viewtcga_tsne();"><font color="blue">View TCGA TSNE Cluster Map</font></a> </div>	
+<br>
+    <div id="stainedcontainer" style="width: 90%; height: 900px;margin: 5px auto;"></div>	
+</div>
+<div id="hexplorer">
+<span id="hexpmapdialog"></span>
+<div id="hexpmap">Loading map...<img src='http://jakelin212.github.io/images/progress.gif'/></div>
+<span id="position"></span><div id="dragbar"></div>
+
+<div id="hexpmenu"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Map</b><a title="user guide/info for hemap exploration" href="http://jakelin212.github.io/doc/hemap_user_guide.pdf" target="_blank"> guide </a></b> <select id="xmapselect" style="width:110px" onchange="javascript:updateHexpmap();"><option value="hemaall">HEMAP ALL</option><option value="aml">AML</option> <option value="tcga">TCGA AML</option></select><span>&nbsp;&nbsp;&nbsp;Type <select id="xpwfeatureatype" style="width:160px" onchange="javascript:updateClusterTypeahead();"><option value="drug">DrugSigDB</option><option value="clin">Clinical</option><option selected value="gexp">Gene Expression</option><option value="gsva">Pathway</option></select>&nbsp;</span><span id="pwdialog"></span>
+<br><span><table><tr>&nbsp;Gene/Pathway/<a href="http://tanlab.ucdenver.edu/DSigDB/DSigDBv1.0/geneSearch.html" title="Lookup Drug Signatures by gene" target="_blank">Drug</a>&nbsp;<input id="gene_stain_ctl" title="gene typeahead on" value="" style="width:430px" data-provide="typeahead" items="20" placeholder=""><button type="button" onclick="javascript:estainGene();">e-stain</button> <span id="reportingx"></span></tr><tr></tr>
+<br>
+
+
+<br>
+<tr>&nbsp;&nbsp;&nbsp;&nbsp;PW <a title="Show/hide numeric clusters on map. Can be use as a reset for stained maps." onclick="javascript:toggle_clustermap();"><font color="blue">Cluster</font></a>/Class &nbsp;<input id="pwpwfeature" title="Stain GSM samples from GSVA metrics using Pathways and drug signature target geneset inputs" value="" style="width:440px" data-provide="typeahead" items="20" placeholder=""><button title="stain map based on binary (B:SAMP/B:CLIN) samples to feature" type="button" onclick="javascript:loadBSAMP();">visSAMP</button></tr><tr></tr>
+
+</td></tr>
+
+<tr><td>&nbsp;Correlation&nbsp;<select id="corrop" style="width:50px"><option value="gt" selected>></option><option value="lt"><</option><option value="abs">abs</option></select><input id="pwpwcorr" value="0.1" style="width:45px">&nbsp;&nbsp;&nbsp;-log10(ePval)&nbsp;<input id="pwpwpvalue" title="significance > cutoff, -log10(x), examples: pvalue of -log10(.001) = 3, -log10(.01) = 2" value="2" style="width:45px">&nbsp;&nbsp;&nbsp;Hypergeometric Test&nbsp;<input id="pwpwhypt" title=">significance cutoff >" value="0" style="width:45px">&nbsp;&nbsp;&nbsp;<button type="button" title="Click to find pairwise results based from selected map, type and cluster/class" onclick="javascript:search_pwpw();">Search</button><span id="dldialog"></span><span id="hexpsearch"></span></tr>
+</table></span>
+<br>
+    <table id="pwtbldiv"></table>
+<br><br><span id='pwctlspan' style="display:none;"><a href="#" onclick="javascript:flippw();"><font color="blue">flip</font></a>
+</span>
+</div>
+<div id="hexpmapselect"></div>
+<div id="tcgactlx"><a href="#" onclick="javascript:gotcgax();"><font color="blue">View TCGA t-SNE Cluster Map</font></a></div>
+</div>
+
+<div id="SNP">
+    <div id="annoSNP"></div>
+<br><span id="annoinfoctl"><a href="#" onclick="javascript:viewAnnoInfo();"><font color="blue">See Annotations Info</font></a></span><span id="annoinfo" style="display:none;"><br><br><b>Annotation Info</b><br>The annotations have been obtained from GEO and reference articles for the samples. Annotations have been manually curated. Acute leukemias were sorted to precursor-B-cell- and precursor-T-cell acute lymphoblastic leukemias (ALL), and acute myeloid leukemias (AML). We used the FAB M0-M7 subtyping for AML. Chronic myelogenous leukemia (CML), juvenile myelomonocytic chronic leukemia (JMML), hairy cell leukemia (HCL) and chronic lymphoblastic leukemia (CLL) are also represented in the dataset. In addition, the retrieved dataset covers 9 B-cell lymphoma types (Burkitt?s lymphoma (BL), classical Hodgkin?s lymphoma (CHL), diffuse large B-cell lymphoma (DLBCL), follicular lymphoma (FL), mucosa-associated lymphoid tissue lymphoma (MALT), mantle cell lymphoma (MCL), marginal zone lymphoma (MZL), nodular lymphocyte predominant Hodgkin?s lymphoma (NLPHL), and primary effusion lymphoma (PEL)), seven T-cell lymphomas (angioimmunoblastic T-cell lymphoma (AILT), anaplastic large-cell lymphoma (ALCL), adult T-cell leukemia/lymphoma (ATL) hepatosplenic T-cell lymphoma (HSTCL), peripheral T-cell lymphoma not otherwise specified (PTCL or PTCLNOS) as well as cutaneous T-cell lymphomas (CTCL) mycosis fungoides (MF) and Sézary syndrome (SS) and 2 NK/NKT-lymphomas (aggressive natural killer cell lymphoma/leukemia (ANKCL) and extranodal NK-T-cell lymphoma nasal type (ENKTL). Finally, multiple myeloma (MM) is included as its own cancer type.<br><br>
+GSM and GSE refer to GEO identifiers for sample and sample set, respectively. The following data has been collected for each sample when available: additional disease specification, cytogenetic and other relevant alterations, tumor stage, tumor type (e.g. primary, meaning that sample has been taken upon diagnosis before cancer treatment, or relapse), other clinical parameters, patient identifier named in GEO, sample source tissue (e.g. bone marrow), isolation criteria (e.g. mononuclear cells or enrichment based on cell surface marker expression), sample purity/tumor content, patient gender, race, and age as well as marker phenotype of the tumor. Survival and tumor progression status and time to death or relapse is also marked. In addition, treatment information includes treatment type and length for both in vivo and ex vivo treatments. Ex vivo treatments list only treatments that have been done in culture. If the cells have been in cultured in a dish, this has been marked into the separate column Cultured.
+</span>	
+<br><div id="aesctl">GSM Collector:<br><textarea style="width:1200px;" rows="2" cols="800" id="gsmcollector"></textarea>&nbsp;<input type='color' id='color3' name='color3' style='width:50px' value='#FF0000' /> <button type="button" onclick="javascript:collected_gsm();">e-stain</button>&nbsp;<span id="gsmprogress"></span></div></div>
+
+<div id="CNV"></div>
+<div id="GEXP">
+    <div id="boxplot_op"><span id="sg_span"></span></div><div id="gene_sg"></div>
+    <div id="boxplot_gexp" style="height: 400px; min-width: 1200px; margin: auto;"></div>	
+    <div id="outlier_ctl"></div>    
+
+</div>
+
+<div id="Portraits">
+     <span id="mapconfig"></span>
+  
+     <div id="celllines"></div>
+     <span id="cldialog"></span>
+     <div id="containerheatmap" style="min-width: 1200px; min-height: 800px; max-width: 1600px; margin: 0 auto"></div>
+  </div>
+
+
+<div id="HInfo">
+    <br>HEMAP is an <a href="https://sourceforge.net/projects/yellowlimon" target="_blank"><font color="blue">open</font></a> sourced web application project designed for interactive cancer maps and annotations. Software/Usage is free (GNU General Public Licence, v2 no warranty) for non-profit research, please contact Dr. Heinäniemi for raw data
+
+<b>
+<br><br>Matti Nykter, Computational Biology, BioMediTech, University of Tampere
+<br>Merja Heinäniemi, Institute of Biomedicin, University of Eastern Finland
+</b>		
+
+<br><br>		
+Please report bugs and see ongoing enhancements on <a href="https://sourceforge.net/p/yellowlimon/tickets/" target="_blank"><font color="blue">issue tracker</font></a>
+<br>
+Updated 02.11.2015 
+<br>
+<br><br>
+<a href="http://www.uta.fi/bmt" target="_blank"><img src="http://jakelin212.github.io/images/bmt.gif" border="0" style="padding:5px;"></img></a>&nbsp;
+<a href="https://www2.uef.fi/en/biolaaketiede/merja-heinaniemi" target="_blank"><img src="http://jakelin212.github.io/images/uef.png" border="0" style="padding:5px;"></img></a>&nbsp; 
+</div>
+</div> <!-- tabs -->
+	</body>
+</html>
