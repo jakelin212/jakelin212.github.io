@@ -194,7 +194,9 @@ function plotTcga(series, gene, mapcontainer){
 	if (gene != ""){
 		title = title + " e-staining " + gene;
 	}
+	var adjwidth = $(window).width()*.9;
 	if  (showcentroids == true && mapcontainer != "container"){
+		adjwidth = $(window).width()*.6;
                var acentroids = {
                 type: 'bubble',
                 name:'Clusters',
@@ -214,6 +216,7 @@ function plotTcga(series, gene, mapcontainer){
 	$('#' + mapcontainer).highcharts({
         chart: {
             zoomType: 'xy',
+	    //width: adjwidth,	
             events: {
                 selection: function (event) {
                         if (event.xAxis != null){
@@ -339,6 +342,7 @@ function plotTcga(series, gene, mapcontainer){
 }
 
 function plotStainedMap(mapsource, jo, stainedobj, mapcontainer){
+        //var adjwidth = $(window).width()*.6;
 	$("#stainctl").show();
         $("#tcgactl").hide();
 	$("#tcgactlx").hide();
@@ -518,6 +522,7 @@ function plotStainedMap(mapsource, jo, stainedobj, mapcontainer){
         $('#' + mapcontainer).highcharts({
         chart: {
             zoomType: 'xy',
+	    //width: adjwidth,
             events: {
                 selection: function (event) {
 			if (event.xAxis != null){
@@ -947,7 +952,9 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
             data: celllineset
         }
 	];//end shemap series
+        var adjwidth = $(window).width()*.9;
 	if  (showcentroids == true && mapcontainer != "container"){
+		adjwidth = $(window).width()*.6;
 	       var acentroids = {
         	type: 'bubble',
         	name:'Clusters',
@@ -1047,6 +1054,7 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
 	$('#' + mapcontainer).highcharts({
         chart: {
             zoomType: 'xy',
+	    //width: adjwidth,
             events: {
     		selection: function (event) {
 			if (event.xAxis != null){

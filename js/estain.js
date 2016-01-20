@@ -26,7 +26,6 @@ function estainCollected(){
 
 
 function estainAnno(){
-	
         var ingsms = "";
 	for (var i in annogsms){
 		ingsms = ingsms + annogsms[i] + " "; 
@@ -49,7 +48,9 @@ function estainAnno(){
                                 _gsmptobj[column + ":" + $("#search_input").val()] = _pts;
                                 goshemap(sessionsource, all_cluster, _gsmptobj);
                                 $( "#tabs" ).tabs( "option", "active", 0 );
-                        },
+        			var fuwidth = $(window).width();
+                		$('div#container').width(.95*fuwidth);
+	                },
                         error: function(){
                         new Messi('Error on data retrieval, please contact help', {title: 'Server error'});}
                 });
