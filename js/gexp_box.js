@@ -7,6 +7,17 @@
 }
 */
 
+function removeA(arr) {
+    var what, a = arguments, L = a.length, ax;
+    while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax= arr.indexOf(what)) !== -1) {
+            arr.splice(ax, 1);
+        }
+    }
+    return arr;
+}
+
 function replaceAll(str, token, newtk){
     return str.split(token).join(newtk);
 
@@ -36,6 +47,7 @@ function updateBoxGene(){
 function prepPlotGeneSampleGroup(){
 	var ingene = $("#boxgene_ctl").val().toUpperCase();
         if (ingene == "" || ingene == undefined){
+		new Messi('You must add sample group(s) and gene for plotting.', {title: 'Gene required'});		
 		return;
 	}
 	gexp_init = ingene;
@@ -56,13 +68,17 @@ function prepPlotGeneSampleGroup(){
 		new Messi('You must add sample groups from annotations search or map selection.', {title: 'Sample groups required'});
 		return;
 	}
-	/*gene = "IRX3 MEIS2"#
-#gene = qform.getvalue('ingene')
-inparams = qform.getvalue('inparams')
-inparams = "IRX3==blood:GSM*GSM215000 GSM214999 GSM214983 GSM214984 GSM214988 GSM214985 GSM215005 GSM215002 GSM215004 GSM215003 GSM214982 |clinical:acute;;MEIS2==blood:GSM*GSM215000 GSM214999 GSM214983 GSM214984 GSM214988 GSM214985 GSM215005 GSM215002 GSM215004 GSM215003 GSM214982 |clinical:blasts"
-*/
+        removeA(sample_groups,"main_cat--Erythroid");
+	removeA(sample_groups,"main_cat--Myeloid");
+	removeA(sample_groups,"main_cat--B-Lymphoid");
+	removeA(sample_groups,"main_cat--T-Lymphoid");
+	if ($("#normalCellSelected").attr("checked") != null){
+		sample_groups.push("main_cat--Erythroid");
+		sample_groups.push("main_cat--Myeloid");
+		sample_groups.push("main_cat--B-Lymphoid");
+		sample_groups.push("main_cat--T-Lymphoid");
+	}
 	var paramobj = {};
-	//ingene = ingene.toUpperCase();
 	paramobj["ingene"] = ingene;
         $("#boxgene_ctl").val(ingene);
 	paramobj["lowoutlier"] = lowoutlier;
@@ -370,9 +386,63 @@ function hideAssignment(){
 }
 
 function showAssignment(){
-	//updateGeneSampleGroup();
+	updateGeneSampleGroup();
 	$("#gesgtable").show();
         $("#showhidegesg").html("<a id='showMyLink' href='#' onclick='hideAssignment();'>HideAssignment</a>");
+}
+
+function boxcat_selection(){
+    var column = $('#boxcolumns').val();
+    var autocomplete = $('#boxsearch_input').typeahead();
+    if (column == "main_cat"){
+        autocomplete.data('typeahead').source = tumortypes;
+    }else if (column == "lineage_tumor_cat"){
+        autocomplete.data('typeahead').source = lineagetypes;
+    }else if (column == "subtype_cat"){
+        autocomplete.data('typeahead').source = subtypes;
+    }else if (column == "cytogenetics"){
+        autocomplete.data('typeahead').source = cytogenetics;
+    }else if (column == "sample_type"){
+        autocomplete.data('typeahead').source = sample_types;
+    }else if (column == "sample_source"){
+        autocomplete.data('typeahead').source = sample_sources;
+    }else if (column == "sample_isolation"){
+        autocomplete.data('typeahead').source = sample_isolations;
+    }else if (column == "alterations"){
+        autocomplete.data('typeahead').source = alterations;
+    }else if (column == "tumor_type"){
+        autocomplete.data('typeahead').source = tumor_types;
+    }else if (column == "survival_status"){
+        autocomplete.data('typeahead').source = survival_status;
+    }else if (column == "cluster_class"){
+        autocomplete.data('typeahead').source = fullmap_gexp_pwcluster_list;
+    }
+    else{
+        autocomplete.data('typeahead').source = [];
+    }
+    $('#boxsearch_input').val("");
+}
+var boxannooptions = '<option value="gse">GSE</option><option value="sample_type">Sample type</option><option value="main_cat" selected>Main Category</option><option value="lineage_tumor_cat">Cancer or cell type category</option><option value="subtype_cat">Subtype</option><option value="spec_cat">Further specification</option><option value="cytogenetics">Cytogenetics</option><option value="alterations">Other genetic alterations</option><option value="sample_source">Sample source</option><option value="sample_isolation">Sample isolation</option><option value="tumor_type">Blood sample type</option><option value="cluster_class">Cluster class</option>';
+
+var boxcolumns = '<select id = "boxcolumns" name="boxcolumns" onchange="boxcat_selection()" style="display:inline">' + boxannooptions + '</select>&nbsp;';
+function addBC2GEXP(){
+        var col = $("#boxcolumns").val();//.toUpperCase();
+        /*if (col == "cluster_class"){
+		new Messi('cluster class sample groups not ready, try later.', {title:"tbd", autoclose:1500});
+		return;
+	}*/
+        if (col == "gsms"){
+                $("#gsmmapcontainer").val($("#search_input").val());
+                gsm2GEXP();
+        }else{
+           
+           var ingene = $("#boxgene_ctl").val();
+           if (ingene == undefined)
+                ingene = gexp_init;
+           var gkey = $("#boxcolumns").val() + "--" + $("#boxsearch_input").val();
+           sample_groups.push(col + "--" + $("#boxsearch_input").val());
+           new Messi('Sample group ' + gkey + ' defined. Add more groups, Advanced combinations can be added from Annotations panel.', {title:"Success", autoclose:1500});
+        }
 }
 
 
@@ -380,13 +450,16 @@ function initBoxplot(pdiv){
 	if (firstbox == 0){
 		firstbox = 1;
 		$("#boxplot_op").html("");
-        	$("#boxplot_op").append('<br>Genes:<input type="search" value="" style="display:block;width:500px;" size="400" name="boxgene_ctl" id="boxgene_ctl" data-provide="typeahead" data-items="10" placeholder="" onchange="javascript:updateGeneSampleGroup();">');
-        	$("#boxplot_op").append("&nbsp;&nbsp;<button type='button' onClick='javascript:prepPlotGeneSampleGroup();'>Plot</button>&nbsp;<span id='sgexp_dialog'></span>&nbsp;<a id='resetMyLink' href='#' onclick='resetBoxPlot();'>Reset</a>&nbsp;<span id='showhidegesg'><a id='hideMyLink' href='#' onclick='hideAssignment();'>HideAssignment</a></span>&nbsp;<span id='gene_dl'>Download:</span><span id='bop_container'></span>");
+        	$("#boxplot_op").append('Group:' + boxcolumns +'<input type="search" value="" style="display:block;width:277px;margin-bottom:2px;" size="277" name="boxsearch_input" id="boxsearch_input" data-provide="typeahead" data-items="10">&nbsp;&nbsp;<button onclick="javascript:addBC2GEXP();">Add</button><font size="-2"> Include_Normal_Cell_Types</font><input type="checkbox" id="normalCellSelected" checked/>' +  '<br>Genes:<input type="search" value="" style="display:block;width:500px;" size="400" name="boxgene_ctl" id="boxgene_ctl" data-provide="typeahead" data-items="10" placeholder="" onchange="javascript:updateGeneSampleGroup();">');
+        	$("#boxplot_op").append("&nbsp;&nbsp;<button type='button' onClick='javascript:prepPlotGeneSampleGroup();'>Plot</button>&nbsp;<span id='sgexp_dialog'></span>&nbsp;<a id='resetMyLink' href='#' onclick='resetBoxPlot();'>Reset</a>&nbsp;<span id='showhidegesg'><a id='hideMyLink' href='#' onclick='showAssignment();'>showAssignment</a></span>&nbsp;<span id='gene_dl'>Download:</span><span id='bop_container'></span>");
 		$("#bop_container").html("<span id='outlier_ctl1'></span>&nbsp;Outlier cutoff:" + lowoutlier + '<=Percentile<=' + highoutlier + "&nbsp;<input type='color' id='color4' name='color4' style='width:50px' value='#3355cc' />");
         	$("#bop_container").css("float", "right");		
         	$('#boxgene_ctl').typeahead({source: hg19genes});
         	$('#boxgene_ctl').val(gexp_init);
 		$("#boxgene_ctl").css("display","inline");
+		$("#boxsearch_input").css("display","inline");
+		$('#boxsearch_input').typeahead({source: tumortypes});
+                $('#boxsearch_input').val("Leukemia");
 	}
 	var sgstr= "";
         for (var sg in sample_groups){

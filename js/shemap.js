@@ -194,7 +194,7 @@ function plotTcga(series, gene, mapcontainer){
 	if (gene != ""){
 		title = title + " e-staining " + gene;
 	}
-	var adjwidth = $(window).width()*.9;
+	var adjwidth = $(window).width()*.72;
 	if  (showcentroids == true && mapcontainer != "container"){
 		adjwidth = $(window).width()*.6;
                var acentroids = {
@@ -216,7 +216,8 @@ function plotTcga(series, gene, mapcontainer){
 	$('#' + mapcontainer).highcharts({
         chart: {
             zoomType: 'xy',
-	    //width: adjwidth,	
+	    width: adjwidth,	
+            height: adjwidth, 
             events: {
                 selection: function (event) {
                         if (event.xAxis != null){
@@ -342,7 +343,7 @@ function plotTcga(series, gene, mapcontainer){
 }
 
 function plotStainedMap(mapsource, jo, stainedobj, mapcontainer){
-        //var adjwidth = $(window).width()*.6;
+        var adjwidth = $(window).width()*.72;
 	$("#stainctl").show();
         $("#tcgactl").hide();
 	$("#tcgactlx").hide();
@@ -522,7 +523,8 @@ function plotStainedMap(mapsource, jo, stainedobj, mapcontainer){
         $('#' + mapcontainer).highcharts({
         chart: {
             zoomType: 'xy',
-	    //width: adjwidth,
+	    width: adjwidth,   
+            height: adjwidth,
             events: {
                 selection: function (event) {
 			if (event.xAxis != null){
@@ -612,7 +614,7 @@ function plotStainedMap(mapsource, jo, stainedobj, mapcontainer){
                                         var ptstr = po.split("_");
                                         if (parseFloat(ptstr[0]) == e.point.x && parseFloat(ptstr[1]) == e.point.y){
                                                 $("#gsmmapcontainer").append(gsms[po] + " ");
-                                                window.open('http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc='+gsms[po]),'_blank';//GSM1226121
+                                                //window.open('http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc='+gsms[po]),'_blank';//GSM1226121
 						return;
                                         }
                                 }
@@ -952,7 +954,7 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
             data: celllineset
         }
 	];//end shemap series
-        var adjwidth = $(window).width()*.9;
+        var adjwidth = $(window).width()*.72;
 	if  (showcentroids == true && mapcontainer != "container"){
 		adjwidth = $(window).width()*.6;
 	       var acentroids = {
@@ -1054,7 +1056,8 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
 	$('#' + mapcontainer).highcharts({
         chart: {
             zoomType: 'xy',
-	    //width: adjwidth,
+            width: adjwidth,   
+            height: adjwidth,
             events: {
     		selection: function (event) {
 			if (event.xAxis != null){
@@ -1137,7 +1140,7 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
 					var ptstr = po.split("_");
 					if (parseFloat(ptstr[0]) == e.point.x && parseFloat(ptstr[1]) == e.point.y){
 						$("#gsmmapcontainer").append(gsms[po] + " ");
-						window.open('http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc='+gsms[po]),'_blank';//GSM1226121
+						//window.open('http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc='+gsms[po]),'_blank';//GSM1226121
 						return;
 					}
 				}

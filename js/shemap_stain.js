@@ -124,7 +124,8 @@ buttons.push({
 
 function plotGeneStainedMap(mapsource, jo, genestains,mapcontainer){
 	mapcontainer = mapcontainer || "container";
-        var sradius = symSize;
+        var adjwidth = $(window).width()*hexpmapwidth;
+	var sradius = symSize;
         $("#sgsmannolink").html("");
 	$("#mapconfig").html("");
 	var st = "HEMAP ALL";
@@ -176,6 +177,8 @@ function plotGeneStainedMap(mapsource, jo, genestains,mapcontainer){
 	$('#' + mapcontainer).highcharts({
         chart: {
             zoomType: 'xy',
+	width: adjwidth,   
+            height: adjwidth,
 	    events: {
                 selection: function (event) {
                		if (event.xAxis != null){ 
@@ -255,7 +258,7 @@ function plotGeneStainedMap(mapsource, jo, genestains,mapcontainer){
                                         var ptstr = po.split("_");
                                         if (parseFloat(ptstr[0]) == e.point.x && parseFloat(ptstr[1]) == e.point.y){
                                                 $("#gsmmapcontainer").append(gsms[po] + " ");
-                               			window.open('http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc='+gsms[po]),'_blank';//GSM1226121
+                               			//window.open('http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc='+gsms[po]),'_blank';//GSM1226121
 				                return;
                                         }
 					}
