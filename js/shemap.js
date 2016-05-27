@@ -351,6 +351,9 @@ function plotStainedMap(mapsource, jo, stainedobj, mapcontainer){
         $("#sgsmannolink").html("");
 	$("#mapconfig").html("");
 	var _title = "HEMAP samples";
+	if (stainedobj.name != null){
+		_title = _title + " " + stainedobj.name;
+	}
         if (mapsource == "leukemia"){
                 _title = "Leukemia_Normal";
         }
