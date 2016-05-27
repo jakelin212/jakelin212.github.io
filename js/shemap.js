@@ -350,7 +350,7 @@ function plotStainedMap(mapsource, jo, stainedobj, mapcontainer){
 	mapcontainer = mapcontainer || "container";
         $("#sgsmannolink").html("");
 	$("#mapconfig").html("");
-	var _title = "HEMAP All";
+	var _title = "HEMAP samples";
         if (mapsource == "leukemia"){
                 _title = "Leukemia_Normal";
         }
@@ -729,7 +729,7 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
 	}else{
 	$('#stainedcontainer').hide(); 
 	//if mapdata is null, then it is init, pass prep_shemap	
-	var _title = "HEMAP All";
+	var _title = "HEMAP samples";
 	if (mapsource == "aml"){
 		_title = "AML Fusions";
 		$("#pw_source").val("aml");

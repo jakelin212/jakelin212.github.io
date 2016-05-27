@@ -86,24 +86,6 @@ function estainGeneSummary(){
                                 var _medium = jo["med"];
                                 var _high = jo["high"];
 				$( "#gpprogress" ).html("");
-				/*var rows = "<tr><th>Category</th><th>Low</th><th>Medium</th><th>High</th></tr>";
-				rows = rows + "<tr><td>AML</td>" + "<td>" + _low["AML"] + "</td><td>" + _medium["AML"] + "</td><td>" + _high["AML"] + "</td></tr>"; 
-				rows = rows + "<tr><td>CML</td>" + "<td>" + _low["CML"] + "</td><td>" + _medium["CML"] + "</td><td>" + _high["CML"] + "</td></tr>";
-				rows = rows + "<tr><td>MM</td>" + "<td>" + _low["MM"] + "</td><td>" + _medium["MM"] + "</td><td>" + _high["MM"] + "</td></tr>";
-				rows = rows + "<tr><td>MP</td>" + "<td>" + _low["MP"] + "</td><td>" + _medium["MP"] + "</td><td>" + _high["MP"] + "</td></tr>";
-				rows = rows + "<tr><td>LP</td>" + "<td>" + _low["LP"] + "</td><td>" + _medium["LP"] + "</td><td>" + _high["LP"] + "</td></tr>";
-				rows = rows + "<tr><td>T-ALL</td>" + "<td>" + _low["T-ALL"] + "</td><td>" + _medium["T-ALL"] + "</td><td>" + _high["T-ALL"] + "</td></tr>";
-				rows = rows + "<tr><td>TCL</td>" + "<td>" + _low["TCL"] + "</td><td>" + _medium["TCL"] + "</td><td>" + _high["TCL"] + "</td></tr>";
-				rows = rows + "<tr><td>pre-B-ALL</td>" + "<td>" + _low["pre-B-ALL"] + "</td><td>" + _medium["pre-B-ALL"] + "</td><td>" + _high["pre-B-ALL"] + "</td></tr>";
-				rows = rows + "<tr><td>BCL</td>" + "<td>" + _low["BCL"] + "</td><td>" + _medium["BCL"] + "</td><td>" + _high["BCL"] + "</td></tr>";
-				rows = rows + "<tr><td>CCL</td>" + "<td>" + _low["CLL"] + "</td><td>" + _medium["CLL"] + "</td><td>" + _high["CLL"] + "</td></tr>";
-				rows = rows + "<tr><td>Erythroid</td>" + "<td>" + _low["Erythroid"] + "</td><td>" + _medium["Erythroid"] + "</td><td>" + _high["Erythroid"] + "</td></tr>";
-				rows = rows + "<tr><td>B-Lymphoid</td>" + "<td>" + _low["B-Lymphoid"] + "</td><td>" + _medium["B-Lymphoid"] + "</td><td>" + _high["B-Lymphoid"] + "</td></tr>";
-				rows = rows + "<tr><td>T-Lymphoid</td>" + "<td>" + _low["T-Lymphoid"] + "</td><td>" + _medium["T-Lymphoid"] + "</td><td>" + _high["T-Lymphoid"] + "</td></tr>";
-				rows = rows + "<tr><td>Myeloid</td>" + "<td>" + _low["Myeloid"] + "</td><td>" + _medium["Myeloid"] + "</td><td>" + _high["Myeloid"] + "</td></tr>";
-				rows = rows + "<tr><td>StemCell</td>" + "<td>" + _low["StemCell"] + "</td><td>" + _medium["StemCell"] + "</td><td>" + _high["StemCell"] + "</td></tr>";
-				rows = rows + "<tr><td>CellLine</td>" + "<td>" + _low["CellLine"] + "</td><td>" + _medium["CellLine"] + "</td><td>" + _high["CellLine"] + "</td></tr>";
-				*/
 				var stable = "<br><table>" + constructSummary(_low, _medium, _high) + "</table>";
 				new Messi(stable, {"titleClass":"success", "width":"500px", title: parameter + ' EStained Summary'});
                         },
@@ -128,7 +110,7 @@ function plotGeneStainedMap(mapsource, jo, genestains,mapcontainer){
 	var sradius = symSize;
         $("#sgsmannolink").html("");
 	$("#mapconfig").html("");
-	var st = "HEMAP ALL";
+	var st = "HEMAP samples";
 	$("#showref").show();
 	if (sessionsource == "leukemia")
 		st = "Leukemia_Normal";
