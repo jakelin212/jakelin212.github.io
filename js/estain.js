@@ -46,7 +46,8 @@ function estainAnno(){
                                 var _gsmptobj = {};
                                 //_gsmptobj[parameter] = jo["esgsms"];
                                 _gsmptobj[column + ":" + $("#search_input").val()] = _pts;
-                                goshemap(sessionsource, all_cluster, _gsmptobj);
+                                
+				goshemap(sessionsource, all_cluster, _gsmptobj);
                                 $( "#tabs" ).tabs( "option", "active", 0 );
         			var fuwidth = $(window).width();
                 		$('div#container').width(.95*fuwidth);
@@ -98,6 +99,9 @@ function estainGene(){
 		if (sessionsource == "aml"){
 			gurl = "/cgi-bin/get_aml_gstain2.cgi";
 		}
+		if (sessionsource == "all"){
+                        gurl = "/cgi-bin/get_all_gstain2.cgi";
+                }
 		$.ajax({
                 	type: "POST",
                 	url:  gurl,
@@ -168,6 +172,10 @@ function estainPathway(){
 		//pwurl = "/cgi-bin/get_hema_pwstain_aml.cgi";
 		sessionsource = "aml";
 	}
+	if (pwsrc == 'all' || $("#xmapselect").val() == 'all'){
+                pwurl = "/cgi-bin/get_hema_pwstain_tall.cgi";
+		sessionsource = "all";
+        }	
 	$.ajax({
                 type: "POST",
                 url:  pwurl,

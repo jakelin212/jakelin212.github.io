@@ -116,6 +116,8 @@ function plotGeneStainedMap(mapsource, jo, genestains,mapcontainer){
 		st = "Leukemia_Normal";
 	if (sessionsource == "aml")
                 st = "AML";
+        if (sessionsource == "all")
+                st = "ALL";
 	if (sessionsource == "tcga"){
                 st = "TCGA";
 		sradius = symSize + 1;

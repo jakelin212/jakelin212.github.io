@@ -738,9 +738,9 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
 		$("#pw_source").val("aml");
 	}
 	if (mapsource == "all"){
+		 _title = "ALL Samples";
                 $("#pw_source").val("all");
         }
-	//catcolors = {"AML":"#3cb371","CML":"#006400","MM":"#8b475d","MP":"#caff70","LP":"#cc8540","T-ALL":"#6495ed","TCL":"#27408b","pre-B-ALL":"#ed82ed","BCL":"#bb8e8e","CLL":"#a020f0","LP":"#658a8a","Erythroid":"#cc8540","B-Lymphoid":"#fe1392","T-Lymphoid":"#00fefe","Myeloid":"#658a8a","StemCell":"#feb90f","CellLine":"#00d9b3","No fusions":"#696969", "t8;21 RUNX1-RUNT1X1":"#00FFFF", "inv16 CBF-MYH":"#FF00FF","MLL fusions":"#FFC0CB","t15;17 PML-RARA":"#800080"};
 	var bgclr = $("#bgclr").val();//"#C0C0C0"; 
 	if (resetHMap != true){
 	if ($("#cataml").prop("checked"))
@@ -982,6 +982,126 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
 	    shemap_series.push(acentroids);
 	
 	}
+	if (mapsource == "all"){
+		/*hyperdiploid: cornflowerblue
+hypodiploid: olivedrab1
+pseudoploid: turquoise4
+t9;22: magenta
+t12;21: cyan
+t1;19: red
+t8;14: darkblue
+MLL: pink
+other: tan2*/
+                var allcolors = {"T-ALL": "darkblue", "MLL":"pink", "hyperdiploid": "cornflowerblue", "hypodiploid": "olivedrab", "pseudoploid": "turquoise",
+"t9;22": "magenta", "t12;21": "cyan", "t1;19": "red", "t8;14": "darkblue", "other":"tan", "NA":"grey"};
+		shemap_series = [
+		{type:'scatter',
+                name: 'T-ALL',
+                color: allcolors["T-ALL"],
+                marker: {
+                        symbol: 'circle'
+                },
+                data: jo["T-ALL"]
+                },
+		{type:'scatter',
+                name: 'hyperdiploid',
+                color: allcolors["hyperdiploid"],
+                marker: {
+                        symbol: 'circle'
+                },
+                data: jo["hyperdiploid"]
+                },
+		{type:'scatter',
+                name: 'hypodiploid',
+                color: allcolors["hypodiploid"],
+                marker: {
+                        symbol: 'circle'
+                },
+                data: jo["hypodiploid"]
+                },
+		{type:'scatter',
+                name: 'pseudodiploid',
+                color: allcolors["pseudodiploid"],
+                marker: {
+                        symbol: 'circle'
+                },
+                data: jo["pseudodiploid"]
+                },
+		{type:'scatter',
+                name: 't9;22',
+                color: allcolors["t9;22"],
+                marker: {
+                        symbol: 'circle'
+                },
+                data: jo["t9;22"]
+                },
+		{type:'scatter',
+                name: 't12;21',
+                color: allcolors["t12;21"],
+                marker: {
+                        symbol: 'circle'
+                },
+                data: jo["t12;21"]
+                },
+		{type:'scatter',
+                name: 't1;19',
+                color: allcolors["t1;19"],
+                marker: {
+                        symbol: 'circle'
+                },
+                data: jo["t1;19"]
+                },
+		{type:'scatter',
+                name: 't8;14',
+                color: allcolors["t8;14"],
+                marker: {
+                        symbol: 'circle'
+                },
+                data: jo["t8;14"]
+                },
+                {type:'scatter',
+                name: 'MLL',
+                color: allcolors["MLL"],
+                marker: {
+                        symbol: 'circle'
+                },
+                data: jo["MLL"]
+                },
+		{type:'scatter',
+                name: 'other',
+                color: allcolors["other"],//catcolors["t8;21 RUNX1-RUNT1X1"],
+                marker: {
+                        symbol: 'circle'
+                },
+                data: jo["other"]},
+		{type:'scatter',
+                name: 'NA',
+                color: allcolors["NA"],//catcolors["t8;21 RUNX1-RUNT1X1"],
+                marker: {
+                        symbol: 'circle'
+                },
+                data: jo["NA"]
+                }      
+		]
+	if  (showcentroids == true && mapcontainer != "container"){
+               var acentroids = {
+                type: 'bubble',
+                name:'Clusters',
+                data: tall_clusters,
+                marker: {
+                        fillOpacity:0.1
+                },
+                events:{
+                    click: function (e){
+                        $("#pwpwfeature").val("cancermap_cluster_" + e.point.name);
+                        search_pwpw();
+                    }
+                }
+              };
+            shemap_series.push(acentroids);
+
+        }
+	}
 	if (mapsource == "aml"){
 	var mllfusionset = jo["MLL fusions"];
 	var nofusionset = jo["No fusions"];
@@ -1046,7 +1166,6 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
                 }
               };
             shemap_series.push(acentroids);
-
         }
 
 	}

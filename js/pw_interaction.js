@@ -5,12 +5,18 @@ var pwaoc = [
 { "sTitle": "BHadj"},
 { "sTitle": "hypergeom_test"},
 { "sTitle": "BHadj"},
-{ "sTitle": "nsamples"},
-{ "sTitle": "ndiff_1"},
-{ "sTitle": "ndiff_2"},
-{ "sTitle": "nna_1"},
-{ "sTitle": "nna_2"}
+{ "sTitle": "nsamples", "visible": false},
+{ "sTitle": "ndiff_1", "visible": false},
+{ "sTitle": "ndiff_2", "visible": false},
+{ "sTitle": "nna_1", "visible": false},
+{ "sTitle": "nna_2", "visible": false}
 ];
+
+function togglePWCols(ccid){
+	var bVis = $('#pwtbldiv').dataTable().fnSettings().aoColumns[ccid].bVisible;
+        $('#pwtbldiv').dataTable().fnSetColumnVis( ccid, bVis ? false : true );
+}
+
 
 function search_pwpw(clustercb){
 	if (clustercb == null)
@@ -38,6 +44,8 @@ function search_pwpw(clustercb){
 	if ($("#xmapselect").val() == "tcga"){
 	        xact = "/cgi-bin/get_tcga_pwpw.cgi";  
 	}
+	if ($("#xmapselect").val() == "all")
+                xact = "/cgi-bin/get_tall_pwpw.cgi";
 	$.ajax({
                 type: "POST",
                 url:  xact,
@@ -52,8 +60,10 @@ function search_pwpw(clustercb){
 					$("#pwctlspan").show();
 				new Messi("Found " + _data.length + ":" + $("#xmapselect").val(), {title: "Results", autoclose:1200, titleClass: 'success', width:"600px"} );
 				$("#pwdialog").html("");
-				$("#dldialog").html('<a href="' + "http://compbio.uta.fi/cgi-bin/download_pwpw.cgi?incclass=" + clusterclass + "&insource=" + ccsource + "&inorder=" + pworder + "&inpv=" + $("#pwpwpvalue").val() + "&incorr=" + $("#pwpwcorr").val() + "&inhypgeo=" + $("#pwpwhypt").val() + '" target="_blank" title="limit to 5000 for performance contact authors for raw files"><font color="blue"> Download(' + _data.length + ')</font></a>'); 
-				$('#pwtbldiv').DataTable( {
+				var viewcontrol = " view/hide: <a href='#' onclick='javascript:togglePWCols(\"6\");'><span id='_6hsl'>nsamples </span></a><a href='#' onclick='javascript:togglePWCols(\"7\");'><span id='_7hsl'>ndif1 </span></a><a href='#' onclick='javascript:togglePWCols(\"8\");'><span id='_8hsl'>ndif2 </span></a><a href='#' onclick='javascript:togglePWCols(\"9\");'><span id='_9hsl'>nna1 </span></a><a href='#' onclick='javascript:togglePWCols(\"10\");'><span id='_10hsl'>nna2 </span></a>" ;
+				$("#dldialog").html('<a href="' + "http://compbio.uta.fi/cgi-bin/download_pwpw.cgi?incclass=" + clusterclass + "&insource=" + ccsource + "&inorder=" + pworder + "&inpv=" + $("#pwpwpvalue").val() + "&incorr=" + $("#pwpwcorr").val() + "&inhypgeo=" + $("#pwpwhypt").val() + '" target="_blank" title="limit to 5000 for performance contact authors for raw files"><font color="blue"> Download(' + _data.length + ')</font></a><br>' + viewcontrol);
+				 
+				pwtable = $('#pwtbldiv').DataTable( {
 			        "aaData": _data,
         			"bProcessing": true,
         			"bLengthChange": false,
@@ -125,6 +135,9 @@ function updateHexpmap(){
 	if (hexsource == "aml"){
 		goshemap(hexsource, null, null, "hexpmap");
 	}
+	if (hexsource == "all"){
+                goshemap(hexsource, null, null, "hexpmap");
+        }
 	updateClusterTypeahead();
 }
 
@@ -186,11 +199,28 @@ function updateClusterTypeahead(){
 			$("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
                 }else if (xftype == "drug"){
 			$('#gene_stain_ctl').typeahead().data('typeahead').source = drugsig_pws;
-			//$('#gene_stain_ctl').typeahead().data('typeahead').source = msig_pws.concat(extra_aml);
                         $('#pwpwfeature').typeahead().data('typeahead').source = aml_drug_pwcluster_list;
 			$("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
                 }
 	}
+	if (xmap == "all"){
+                if (xftype == "clin"){
+                        $('#gene_stain_ctl').typeahead().data('typeahead').source = clin_all_pathways;
+                        $('#pwpwfeature').typeahead().data('typeahead').source = all_clin_pwcluster_list;
+                        $("#pwpwhypt").val("0");
+                }else if (xftype == "gexp"){
+                        $('#pwpwfeature').typeahead().data('typeahead').source = all_gexp_pwcluster_list;
+                        $("#pwpwhypt").val("0");
+                }else if (xftype == "gsva"){
+                        $('#gene_stain_ctl').typeahead().data('typeahead').source = msig_pws;
+                        $('#pwpwfeature').typeahead().data('typeahead').source = all_gsva_pwcluster_list;
+                        $("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
+                }else if (xftype == "drug"){
+                        $('#gene_stain_ctl').typeahead().data('typeahead').source = drugsig_pws;
+                        $('#pwpwfeature').typeahead().data('typeahead').source = all_drug_pwcluster_list;
+                        $("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
+                }
+        }
 	if (xmap == "tcga"){
 		$("#pwpwhypt").val("0");
 		$("#pwpwpvalue").val("0");	
