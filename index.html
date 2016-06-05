@@ -17,7 +17,6 @@
 	<script src="http://jakelin212.github.io/lib/js/highcharts.js"></script> 
         <script type="text/javascript" src="http://jakelin212.github.io/lib/js/exporting.js"></script>
 	<script src="http://jakelin212.github.io/lib/js/highcharts-more.js"></script>
-        <!-- <script src="http://jakelin212.github.io/lib/js/heatmap.js"></script> -->
 	<script src="http://jakelin212.github.io/lib/js/jquery.dataTables.min.js"></script>
 	<script src="http://jakelin212.github.io/lib/js/messi.js"></script>
 	<script type="text/javascript" src="http://jakelin212.github.io/lib/js/spectrum.js"></script>
@@ -96,13 +95,13 @@
 
 #hexpmap{
 float:left;
-width:60%;
+min-width:58%;
 height:750px;
 overflow:scroll;
 }
 
 #hexpmenu{
-float:left;
+float:right;
 width:40%;
 overflow:scroll;
 }
@@ -127,7 +126,16 @@ overflow:scroll;
     position:absolute;
     cursor: col-resize;
     z-index:999}
- 
+
+select{
+/*    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;*/
+    padding: 0px;
+    height: 28px;
+    line-height: 28px;
+    margin-bottom: 1px;
+} 
   </STYLE>
 
 
@@ -144,9 +152,16 @@ $(function () {
         // Tab associated with the panel that is about to be activated
         var t = ui.newTab;
         var mindex = ui.newTab.index();
-	settingsHemap();	
+	settingsHemap();
+	if (mindex == 0){
+		var fuwidth = $(window).width();
+		$('div#container').width(.8*fuwidth);
+		$('div#container').height(.8*fuwidth);
+	}	
 	if (mindex == 1){
                 tcga_tsne_mode = 0;
+		var fuwidth = $(window).width();
+		$('div#hexpmap').width(.55*fuwidth);
 		$("#tcgactlx").hide();//loadPWTable();
 		return;
         }
@@ -255,33 +270,31 @@ else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
     <li><a href="#HInfo"><b>Info</b></a></li>
 </ul>
   <div id="summary">
-<font color="blue"><span><a href="#" onclick="javascript:viewHemap('hemaall');"><font color="blue">HEMAP: All</font></a>&nbsp;<a href="#" onclick="javascript:viewHemap('aml');"><font color="blue">AML</font></a>&nbsp;<a href="#" onclick="javascript:viewHemap('tcga');"><font color="blue">TCGA</font></a> </span><span id="showref"><a href="#" onclick="showRefMap();"><font color="blue">&nbsp;showRefMap</font></a></span><span id="hideref"><a href="#" onclick="hideRefMap();"><font color="blue">&nbsp;hideRefMap</font></a></span></font><span style="float:right;"><span id="sgsmannolink"></span><span id="reporting"></span>&nbsp;<a href="http://jakelin212.github.io/doc/hemap_user_guide.pdf" target="_blank"><font color="blue">User guide</font></a> </span><br>
+<font color="blue"><span><a href="#" onclick="javascript:viewHemap('hemaall');"><font color="blue">HEMAP samples</font></a>&nbsp;<a href="#" onclick="javascript:viewHemap('all');"><font color="blue">ALL</font></a>&nbsp;<a href="#" onclick="javascript:viewHemap('aml');"><font color="blue">AML</font></a>&nbsp;<a href="#" onclick="javascript:viewHemap('tcga');"><font color="blue">TCGA</font></a> </span><span id="showref"><a href="#" onclick="showRefMap();"><font color="blue">&nbsp;showRefMap</font></a></span><span id="hideref"><a href="#" onclick="hideRefMap();"><font color="blue">&nbsp;hideRefMap</font></a></span></font><span style="float:right;"><span id="sgsmannolink"></span><span id="reporting"></span>&nbsp;<a href="http://jakelin212.github.io/doc/hemap_user_guide.pdf" target="_blank"><font color="blue">User guide</font></a> </span><br>
 <span id="mapprogress"></span>
-    <div id="container" style="width: 90%; height: 900px;margin: 5px auto;"></div>
+    <div id="container" style="min width: 80%; height: 80%;margin: 5px auto;"></div>
     <div id="stainctl" style="min width: 310px;height: 50px auto;  margin: 5px auto;"></div>	    
     <div id="tcgactl"><a href="#" onclick="javascript:viewtcga_tsne();"><font color="blue">View TCGA TSNE Cluster Map</font></a> </div>	
 <br>
-    <div id="stainedcontainer" style="width: 90%; height: 900px;margin: 5px auto;"></div>	
+    <div id="stainedcontainer" style="min width: 800px; height: 900px;margin: 5px auto;"></div>	
 </div>
 <div id="hexplorer">
 <span id="hexpmapdialog"></span>
-<div id="hexpmap">Loading map...<img src='http://jakelin212.github.io/images/progress.gif'/></div>
+<div id="hexpmap" style="min width: 800px; height: 1000px;margin: 5px auto;">Loading map...<img src='http://jakelin212.github.io/images/progress.gif'/></div>
 <span id="position"></span><div id="dragbar"></div>
 
-<div id="hexpmenu"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Map</b><a title="user guide/info for hemap exploration" href="http://jakelin212.github.io/doc/hemap_user_guide.pdf" target="_blank"> guide </a></b> <select id="xmapselect" style="width:110px" onchange="javascript:updateHexpmap();"><option value="hemaall">HEMAP ALL</option><option value="aml">AML</option> <option value="tcga">TCGA AML</option></select><span>&nbsp;&nbsp;&nbsp;Type <select id="xpwfeatureatype" style="width:160px" onchange="javascript:updateClusterTypeahead();"><option value="drug">DrugSigDB</option><option value="clin">Clinical</option><option selected value="gexp">Gene Expression</option><option value="gsva">Pathway</option></select>&nbsp;</span><span id="pwdialog"></span>
-<br><span><table><tr>&nbsp;Gene/Pathway/<a href="http://tanlab.ucdenver.edu/DSigDB/DSigDBv1.0/geneSearch.html" title="Lookup Drug Signatures by gene" target="_blank">Drug</a>&nbsp;<input id="gene_stain_ctl" title="gene typeahead on" value="" style="width:430px" data-provide="typeahead" items="20" placeholder=""><button type="button" onclick="javascript:estainGene();">e-stain</button> <span id="reportingx"></span></tr><tr></tr>
+<div id="hexpmenu">&nbsp;Resource map <select id="xmapselect" style="width:140px" onchange="javascript:updateHexpmap();"><option value="hemaall">HEMAP samples</option><option value="all">ALL</option><option value="aml">AML</option> <option value="tcga">TCGA AML</option></select><span>&nbsp;&nbsp;&nbsp;Type <select id="xpwfeatureatype" style="width:160px" onchange="javascript:updateClusterTypeahead();"><option value="drug">DrugSigDB</option><option value="clin">Clinical</option><option selected value="gexp">Gene Expression</option><option value="gsva">Pathway</option></select>&nbsp;<a title="user guide/info for hemap exploration" href="http://jakelin212.github.io/doc/hemap_user_guide.pdf" target="_blank"> guide</a></span><span id="pwdialog"></span>
+<br><span><table><tr>&nbsp;Gene/Pathway/<a href="http://tanlab.ucdenver.edu/DSigDB/DSigDBv1.0/geneSearch.html" title="Lookup Drug Signatures by gene" target="_blank">Drug</a>&nbsp;<input id="gene_stain_ctl" title="gene typeahead on" value="" style="width:400px" data-provide="typeahead" items="20" placeholder=""><button type="button" onclick="javascript:estainGene();">e-stain</button> <span id="reportingx"></span></tr><tr></tr>
 <br>
 
 
-<br>
-<tr>&nbsp;&nbsp;&nbsp;&nbsp;PW <a title="Show/hide numeric clusters on map. Can be use as a reset for stained maps." onclick="javascript:toggle_clustermap();"><font color="blue">Cluster</font></a>/Class &nbsp;<input id="pwpwfeature" title="Stain GSM samples from GSVA metrics using Pathways and drug signature target geneset inputs" value="" style="width:440px" data-provide="typeahead" items="20" placeholder=""><button title="stain map based on binary (B:SAMP/B:CLIN) samples to feature" type="button" onclick="javascript:loadBSAMP();">visSAMP</button></tr><tr></tr>
+<tr>&nbsp;PW <a title="Show/hide numeric clusters on map. Can be use as a reset for stained maps." onclick="javascript:toggle_clustermap();"><font color="blue">Cluster</font></a>/Class &nbsp;<input id="pwpwfeature" title="Stain GSM samples from GSVA metrics using Pathways and drug signature target geneset inputs" value="" style="width:400px" data-provide="typeahead" items="20" placeholder=""><button title="stain map based on binary (B:SAMP/B:CLIN) samples to feature" type="button" onclick="javascript:loadBSAMP();">viSamp</button></tr><tr></tr>
+</tr>
 
-</td></tr>
-
-<tr><td>&nbsp;Correlation&nbsp;<select id="corrop" style="width:50px"><option value="gt" selected>></option><option value="lt"><</option><option value="abs">abs</option></select><input id="pwpwcorr" value="0.1" style="width:45px">&nbsp;&nbsp;&nbsp;-log10(ePval)&nbsp;<input id="pwpwpvalue" title="significance > cutoff, -log10(x), examples: pvalue of -log10(.001) = 3, -log10(.01) = 2" value="2" style="width:45px">&nbsp;&nbsp;&nbsp;Hypergeometric Test&nbsp;<input id="pwpwhypt" title=">significance cutoff >" value="0" style="width:45px">&nbsp;&nbsp;&nbsp;<button type="button" title="Click to find pairwise results based from selected map, type and cluster/class" onclick="javascript:search_pwpw();">Search</button><span id="dldialog"></span><span id="hexpsearch"></span></tr>
+<tr>&nbsp;Corr.&nbsp;<select id="corrop" style="width:35px;height:28px"><option value="gt" selected></option><option value="lt"></option><option value="abs">abs</option></select>&nbsp;<input id="pwpwcorr" value="0.1" style="width:35px">&nbsp;-log10(ePval)&nbsp;<input id="pwpwpvalue" title="significance > cutoff, -log10(x), examples: pvalue of -log10(.001) = 3, -log10(.01) = 2" value="2" style="width:35px">&nbsp;Hypergeometric Test&nbsp;<input id="pwpwhypt" title=">significance cutoff >" value="0" style="width:35px">&nbsp;<button type="button" title="Click to find pairwise results based from selected map, type and cluster/class" onclick="javascript:search_pwpw();">search&nbsp;</button><span id="dldialog"></span><span id="hexpsearch"></span></tr>
 </table></span>
 <br>
-    <table id="pwtbldiv"></table>
+    <table id="pwtbldiv" class="display" cellpadding="0" cellspacing="0" border="0"></table>
 <br><br><span id='pwctlspan' style="display:none;"><a href="#" onclick="javascript:flippw();"><font color="blue">flip</font></a>
 </span>
 </div>
@@ -308,13 +321,11 @@ GSM and GSE refer to GEO identifiers for sample and sample set, respectively. Th
      <span id="mapconfig"></span>
   
      <div id="celllines"></div>
-     <span id="cldialog"></span>
      <div id="containerheatmap" style="min-width: 1200px; min-height: 800px; max-width: 1600px; margin: 0 auto"></div>
   </div>
 
-
 <div id="HInfo">
-    <br>HEMAP is an <a href="https://sourceforge.net/projects/yellowlimon" target="_blank"><font color="blue">open</font></a> sourced web application project designed for interactive cancer maps and annotations. Software/Usage is free (GNU General Public Licence, v2 no warranty) for non-profit research, please contact Dr. Heinäniemi for raw data
+    <br>HEMAP is an <a href="https://sourceforge.net/p/yellowlimon/code/HEAD/tree/trunk/shemap/" target="_blank"><font color="blue">open</font></a> sourced web application project designed for interactive exploration of cancer maps, annotations and statistical relationships.<a href="doc/kuopionSkriptit.zip" target="_blank"><font color="blue"> E-Staining, drug and pathway analysis</font></a>, <a href="doc/Remapping_codes.zip" target="_blank"><font color="blue">remapping</font></a> and gene expression normalisation <a href="doc/re_RMA.txt.gz" target="_blank"><font color="blue">guidelines</font></a> source codes are provided. Software/Usage is free (GNU General Public Licence, v2 no warranty) for non-profit research, please contact Dr. Heinäniemi for raw data.
 
 <b>
 <br><br>Matti Nykter, Computational Biology, BioMediTech, University of Tampere
@@ -322,9 +333,8 @@ GSM and GSE refer to GEO identifiers for sample and sample set, respectively. Th
 </b>		
 
 <br><br>		
-Please report bugs and see ongoing enhancements on <a href="https://sourceforge.net/p/yellowlimon/tickets/" target="_blank"><font color="blue">issue tracker</font></a>
-<br>
-Updated 02.11.2015 
+We encourage research groups to contribute data for inclusion into the resource; please also contact authors with new feature requests and permissions for commercial usage.<br> 
+Updated January 19, 2016.  
 <br>
 <br><br>
 <a href="http://www.uta.fi/bmt" target="_blank"><img src="http://jakelin212.github.io/images/bmt.gif" border="0" style="padding:5px;"></img></a>&nbsp;
