@@ -10,7 +10,7 @@ import hemaall_gsmsxy2
 
 qform = cgi.FieldStorage()
 source = qform.getvalue('insource')
-#source = "aml" #"hemaall"
+#source = "all" #"hemaall"
 
 source = "bsamp_" + source
 #path will depend on map selection
@@ -27,11 +27,13 @@ fi.close()
 gsmxy = hemaall_gsmsxy2.gsmxy
 if (source == "bsamp_aml"):
 	gsmxy = hemaall_gsmsxy2.aml_gsmxy
+if (source == "bsamp_all"):
+        gsmxy = hemaall_gsmsxy2.all_gsmxy
 
 #cluster class
 ccname = qform.getvalue('incclass')
 #ccname = "GENETICS_preBALL_hypodiploid"
-#ccname = "cancermap_cluster_20_and_29" #cancermap_cluster_NonCancer_and_Cancer_Myeloma"#"annotated_class_CellLine_vs_T-ALL"#_list.py"
+#ccname = "cancermap_cluster_15pct_ROSS_CLU_6_BW_0.9"#cancermap_cluster_20_and_29" #cancermap_cluster_NonCancer_and_Cancer_Myeloma"#"annotated_class_CellLine_vs_T-ALL"#_list.py"
 if (os.path.isfile(source + "/" + ccname + "_list.py") == True):
     gi = open(source + "/" + ccname + "_list.py", "r")
     annos = gi.readline().strip().split("\t")
