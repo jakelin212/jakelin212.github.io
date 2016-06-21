@@ -1,6 +1,16 @@
 
 function estainCollected(){
+
 	var parameter = ($("#gsmcollector").val());
+	if (parameter.indexOf("\n") != -1){
+		parameter = $("#gsmcollector").val().split("\n").join(" ");
+	}
+	if (parameter.indexOf("\t") != -1){
+                parameter = $("#gsmcollector").val().split("\t").join(" ");
+        }
+	if (parameter.indexOf(",") != -1){
+                parameter = $("#gsmcollector").val().split(",").join(" ");
+        }
         var column = $("#columns").val();
 	$( "#snp_dialog" ).html("<img src='http://jakelin212.github.io/images/progress.gif' /> Processing eStain ...");
         $.ajax({
