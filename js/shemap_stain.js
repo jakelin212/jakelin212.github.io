@@ -118,6 +118,8 @@ function plotGeneStainedMap(mapsource, jo, genestains,mapcontainer){
                 st = "AML";
         if (sessionsource == "all")
                 st = "ALL";
+        if (sessionsource == "lymphoma")
+                st = "Lymphoma";
 	if (sessionsource == "tcga"){
                 st = "TCGA";
 		sradius = symSize + 1;
@@ -128,23 +130,6 @@ function plotGeneStainedMap(mapsource, jo, genestains,mapcontainer){
 	_title = _title.replace("_zscore", "");
 	var shemap_series = [];
         showcentroids = false; 
-        /*if  (showcentroids == true && mapcontainer != "container"){
-               var acentroids = {
-                type: 'bubble',
-                name:'Clusters',
-                data: all_clusters,
-                marker: {
-                        fillOpacity:0.1
-                },
-                events:{
-                    click: function (e){
-                        $("#pwpwfeature").val("cancermap_cluster_" + e.point.name);
-                    }
-                }
-              };
-            shemap_series.push(acentroids);
-
-        }*/
 	if (mapsource.indexOf("tcga_zscore") != -1){
 		shemap_series.push(genestains["vlow"]);
         	shemap_series.push(genestains["low"]);

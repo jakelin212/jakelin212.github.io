@@ -112,6 +112,9 @@ function estainGene(){
 		if (sessionsource == "all"){
                         gurl = "/cgi-bin/get_all_gstain2.cgi";
                 }
+		if (sessionsource == "lymphoma"){
+                        gurl = "/cgi-bin/get_lymphoma_gstain2.cgi";
+                }
 		$.ajax({
                 	type: "POST",
                 	url:  gurl,

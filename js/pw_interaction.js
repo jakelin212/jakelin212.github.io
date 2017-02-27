@@ -41,9 +41,10 @@ function search_pwpw(clustercb){
 	var xact = "/cgi-bin/get_pwpw.cgi";
 	if ($("#xmapselect").val() == "aml")
 		xact = "/cgi-bin/get_aml_pwpw.cgi";
-	if ($("#xmapselect").val() == "tcga"){
+	if ($("#xmapselect").val() == "tcga")
 	        xact = "/cgi-bin/get_tcga_pwpw.cgi";  
-	}
+	if ($("#xmapselect").val() == "lymphoma")
+                xact = "/cgi-bin/get_lymphoma_pwpw.cgi";
 	if ($("#xmapselect").val() == "all")
                 xact = "/cgi-bin/get_tall_pwpw.cgi";
 	$.ajax({
@@ -53,7 +54,7 @@ function search_pwpw(clustercb){
                         success: function(json)
                         {
 	                         if ($.parseJSON(json) == null){
-                                        new Messi('Error on data retrieval, please contact help', {title: 'Server error'});}
+                                        new Messi('No records found for cluster class ' + clusterclass + " in type " + ccsource , {title: 'Warning'});}
                                 var jo  = $.parseJSON(json);
                                 var _data = jo["aaData"];
 				if (_data.length > 0)
@@ -111,9 +112,9 @@ function updateHexpmap(){
                 $('#gene_stain_ctl').typeahead().data('typeahead').source = tcga_gexps;
 
 		$("#xpwfeatureatype").append().append($('<option>', { value : "drug" }).text("DrugSigDB"));
-		$("#xpwfeatureatype").append().append($('<option>', { value : "b_clin" }).text("Binary:Clinical"));
-                $("#xpwfeatureatype").append().append($('<option>', { value : "c_clin" }).text("Categories:Clinical"));
-		$("#xpwfeatureatype").append().append($('<option>', { value : "n_clin" }).text("Numeric:Clinical")); 
+		$("#xpwfeatureatype").append().append($('<option>', { value : "b_clin" }).text("Clinical:Binary"));
+                $("#xpwfeatureatype").append().append($('<option>', { value : "c_clin" }).text("Clinical:Categorical"));
+		$("#xpwfeatureatype").append().append($('<option>', { value : "n_clin" }).text("Clinical:Numeric")); 
 		$("#xpwfeatureatype").append().append($('<option>', { value : "gexp" }).text("Gene Expression"));
 		$("#xpwfeatureatype").append().append($('<option>', { value : "gsva" }).text("Pathway"));
 		$("#xpwfeatureatype").append().append($('<option>', { value : "meth" }).text("Methylation"));
@@ -136,6 +137,15 @@ function updateHexpmap(){
 		goshemap(hexsource, null, null, "hexpmap");
 	}
 	if (hexsource == "all"){
+                goshemap(hexsource, null, null, "hexpmap");
+        }
+	if (hexsource == "lymphoma"){
+		$("#xpwfeatureatype").html("");
+                $("#xpwfeatureatype").append().append($('<option>', { value : "drug" }).text("DrugSigDB"));
+                $("#xpwfeatureatype").append().append($('<option>', { value : "b_clin" }).text("Clinical:Binary"));
+                $("#xpwfeatureatype").append().append($('<option>', { value : "n_clin" }).text("Clinical:Numeric"));
+		$("#xpwfeatureatype").append().append($('<option>', { value : "gexp" }).text("Gene Expression"));
+                $("#xpwfeatureatype").append().append($('<option>', { value : "gsva" }).text("Pathway"));
                 goshemap(hexsource, null, null, "hexpmap");
         }
 	updateClusterTypeahead();
@@ -221,6 +231,29 @@ function updateClusterTypeahead(){
                         $("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
                 }
         }
+	if (xmap == "lymphoma"){
+                if (xftype == "n_clin"){
+                        $('#gene_stain_ctl').typeahead().data('typeahead').source = clin_all_pathways;
+                        $('#pwpwfeature').typeahead().data('typeahead').source = lymphoma_nclin_pwcluster_list;
+                        $("#pwpwhypt").val("0");
+                }else if (xftype == "b_clin"){
+			$('#gene_stain_ctl').typeahead().data('typeahead').source = clin_all_pathways;
+                        $('#pwpwfeature').typeahead().data('typeahead').source = lymphoma_bclin_pwcluster_list;
+                        $("#pwpwhypt").val("0");
+		}else if (xftype == "gexp"){
+                        $('#pwpwfeature').typeahead().data('typeahead').source = lymphoma_gexp_pwcluster_list;
+                        $("#pwpwhypt").val("0");
+                }else if (xftype == "gsva"){
+                        $('#gene_stain_ctl').typeahead().data('typeahead').source = msig_pws;
+                        $('#pwpwfeature').typeahead().data('typeahead').source = lymphoma_gsva_pwcluster_list;
+                        $("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
+                }else if (xftype == "drug"){
+                        $('#gene_stain_ctl').typeahead().data('typeahead').source = drugsig_pws;
+                        $('#pwpwfeature').typeahead().data('typeahead').source = lymphoma_drug_pwcluster_list;
+                        $("#reportingx").html(' <button onclick="javascript:getpwmember()">getGeneMembers</button>');
+                }
+        }
+	
 	if (xmap == "tcga"){
 		$("#pwpwhypt").val("0");
 		$("#pwpwpvalue").val("0");	

@@ -37,6 +37,17 @@ var lowcolor = "#0000CC";
 var medcolor = "#C2C2C6";
 var highcolor = "#FF0000";
 
+var lymphomacolors = {
+"DLBCL":"cornflowerblue",
+"MZL":"cyan",
+"MALT":"purple",
+"MCL":"urquoise4",
+"CHL":"magenta",
+"BL":"red",
+"FL":"pink",
+"NLPHL":"tan2",
+"TCL":"royalblue4"
+};
 var catcolors = {"AML":"#3cb371","CML":"#006400","MM":"#8b475d","MP":"#caff70","LP":"#cc8540","T-ALL":"#6495ed","TCL":"#27408b","pre-B-ALL":"#ed82ed","BCL":"#bb8e8e","CLL":"#a020f0","LP":"#658a8a","Erythroid":"#cc8540","B-Lymphoid":"#fe1392","T-Lymphoid":"#00fefe","Myeloid":"#658a8a","StemCell":"#feb90f","CellLine":"#00d9b3","No fusions":"#696969", "t8;21 RUNX1-RUNT1X1":"#00FFFF", "inv16 CBF-MYH":"#FF00FF","MLL fusions":"#FFC0CB","t15;17 PML-RARA":"#800080", "NA":"#a0a0a0", "NO":"#0000FF", "YES":"#FF0000", "Na":"#a0a0a0", "na":"#a0a0a0", "0":"#0000FF", "1":"#FF0000", "medium":"#a0a0a0", "low":"#0000FF", "high":"#FF0000"};
 
 var catcolor_list = ["#3cb371","#006400","#8b475d","#caff70","#cc8540","#6495ed","#27408b","#ed82ed","#bb8e8e","#a020f0","#658a8a","#cc8540","#fe1392","#00fefe","#658a8a","#feb90f","#00d9b3","#696969","#00FFFF","#FF00FF","#FFC0CB","#800080"]; 

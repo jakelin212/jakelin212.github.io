@@ -741,6 +741,10 @@ function goshemap(mapsource, mapdata, stainsource, mapcontainer){
 		 _title = "ALL Samples";
                 $("#pw_source").val("all");
         }
+	if (mapsource == "lymphoma"){
+                 _title = "Lymphoma Samples";
+                $("#pw_source").val("lymphoma");
+        }
 	var bgclr = $("#bgclr").val();//"#C0C0C0"; 
 	if (resetHMap != true){
 	if ($("#cataml").prop("checked"))
@@ -1102,6 +1106,100 @@ other: tan2*/
 
         }
 	}
+
+	if (mapsource == "lymphoma"){
+        	shemap_series = [
+        	{type:'scatter',
+            name: 'CHL',
+            color: lymphomacolors["CHL"],
+        marker: {
+                symbol: 'circle'
+            },
+            data: jo["CHL"]
+        },
+	{type:'scatter',
+            name: 'BL',
+            color: lymphomacolors["BL"],
+        marker: {
+                symbol: 'circle'
+            },
+            data: jo["BL"]
+        	},
+	{type:'scatter',
+            name: 'DLBCL',
+            color: lymphomacolors["DLBCL"],
+        marker: {
+                symbol: 'circle'
+            },
+            data: jo["DLBCL"]
+                },	
+	{type:'scatter',
+            name: 'MCL',
+            color: lymphomacolors["MCL"],
+        marker: {
+                symbol: 'circle'
+            },  
+            data: jo["MCL"]
+                }, {type:'scatter',
+            name: 'TCL',
+            color: lymphomacolors["TCL"],
+        marker: {
+                symbol: 'circle'
+            },  
+            data: jo["TCL"]
+                }, 
+	{type:'scatter',
+            name: 'MALT',
+            color: lymphomacolors["MALT"],
+        marker: {
+                symbol: 'circle'
+            },  
+            data: jo["MALT"]
+                }, 
+	{type:'scatter',
+            name: 'FL',
+            color: lymphomacolors["FL"],
+        marker: {
+                symbol: 'circle'
+            },  
+            data: jo["FL"]
+                }, 
+	{type:'scatter',
+            name: 'NLPHL',
+            color: lymphomacolors["NLPHL"],
+        marker: {
+                symbol: 'circle'
+            },  
+            data: jo["NLPHL"]
+                }, 
+	{type:'scatter',
+            name: 'MZL',
+            color: lymphomacolors["MZL"],
+        marker: {
+                symbol: 'circle'
+            },  
+            data: jo["MZL"]
+                }
+	];
+	if  (showcentroids == true && mapcontainer != "container"){
+               var acentroids = {
+                type: 'bubble',
+                name:'Clusters',
+                data: lymphoma_clusters,
+                marker: {
+                        fillOpacity:0.1
+                },
+                events:{
+                    click: function (e){
+                        $("#pwpwfeature").val("cancermap_cluster_" + e.point.name);
+                        search_pwpw();
+                    }
+                }
+              };
+            shemap_series.push(acentroids);
+        }
+	}
+	
 	if (mapsource == "aml"){
 	var mllfusionset = jo["MLL fusions"];
 	var nofusionset = jo["No fusions"];
